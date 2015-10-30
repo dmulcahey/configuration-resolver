@@ -5,7 +5,7 @@
 
 	<artifactId>configuration-resolver</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	
+
 	<parent>
 		<groupId>com.github.dmulcahey</groupId>
 		<artifactId>parent-pom</artifactId>
@@ -16,13 +16,24 @@
 
 	<name>configuration-resolver</name>
 
-	<properties>
-		<java.version>1.6</java.version>
-		<maven.compiler.source>${java.version}</maven.compiler.source>
-		<maven.compiler.target>${java.version}</maven.compiler.target>
-		<maven.compiler.testSource>${java.version}</maven.compiler.testSource>
-		<maven.compiler.testTarget>${java.version}</maven.compiler.testTarget>
-	</properties>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/dmulcahey/configuration-resolver/issues</url>
+	</issueManagement>
+
+	<inceptionYear>2013</inceptionYear>
+
+	<scm>
+		<connection>scm:git:https://github.com/dmulcahey/configuration-resolver.git</connection>
+		<developerConnection>scm:git:git@github.com:dmulcahey/configuration-resolver.git</developerConnection>
+		<url>https://github.com/dmulcahey/configuration-resolver</url>
+	</scm>
+
+	<ciManagement>
+		<system>Travis CI</system>
+		<url>https://travis-ci.org/dmulcahey/configuration-resolver</url>
+	</ciManagement>
+
 
 	<dependencies>
 		<dependency>
