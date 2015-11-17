@@ -22,6 +22,11 @@ import com.google.common.collect.Lists;
 
 public class CombinedClasspathConfigurationResolver extends AbstractClasspathConfigurationResolver<CombinedClasspathConfiguration> {
 
+	public static final String USE_UNION_COMBINER = "CCCR.useUnionCombiner";
+	public static final String USE_MERGE_COMBINER = "CCCR.useMergeCombiner";
+	public static final String LEGACY_USE_UNION_COMBINER = "CfgMgr.useUnionCombiner";
+	public static final String LEGACY_USE_MERGE_COMBINER = "CfgMgr.useMergeCombiner";
+	
 	public CombinedClasspathConfigurationResolver(ConfigurationDescriptorResolver<ClasspathResource> configurationDescriptorResolver) {
 		super(configurationDescriptorResolver);
 	}
@@ -35,9 +40,9 @@ public class CombinedClasspathConfigurationResolver extends AbstractClasspathCon
 		for(ClasspathResource classpathResource : classpathResources){
 			combinedClasspathConfiguration.addConfiguration(CommonsConfigurationUtil.buildConfiguration(classpathResource));
 		}
-		if(combinedClasspathConfiguration.containsKey(CombinedClasspathConfiguration.USE_UNION_COMBINER)){
+		if(combinedClasspathConfiguration.containsKey(USE_UNION_COMBINER) || combinedClasspathConfiguration.containsKey(LEGACY_USE_UNION_COMBINER)){
 			combinedClasspathConfiguration.setNodeCombiner(new UnionCombiner());
-		}else if(combinedClasspathConfiguration.containsKey(CombinedClasspathConfiguration.USE_MERGE_COMBINER)){
+		}else if(combinedClasspathConfiguration.containsKey(USE_MERGE_COMBINER) || combinedClasspathConfiguration.containsKey(LEGACY_USE_MERGE_COMBINER)){
 			combinedClasspathConfiguration.setNodeCombiner(new MergeCombiner());
 		}
 		return combinedClasspathConfiguration;

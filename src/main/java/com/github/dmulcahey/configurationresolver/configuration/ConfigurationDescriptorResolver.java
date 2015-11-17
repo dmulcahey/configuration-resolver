@@ -18,7 +18,7 @@ public class ConfigurationDescriptorResolver<T extends AbstractResource> extends
 		Map<String, Set<T>> allResourcesByName = arrangeResourcesByName(input);
 		
 		for(Entry<String, Set<T>> resourceSetEntry : allResourcesByName.entrySet()){
-			ConfigurationDescriptor<T> combinedConfigurationDescriptor = new ConfigurationDescriptor<T>(resourceSetEntry.getKey());
+			ConfigurationDescriptor<T> combinedConfigurationDescriptor = new DefaultConfigurationDescriptor<T>(resourceSetEntry.getKey());
 			combinedConfigurationDescriptor.getResources().addAll(resourceSetEntry.getValue());
 			combinedConfigurationDescriptors.add(combinedConfigurationDescriptor);
 		}

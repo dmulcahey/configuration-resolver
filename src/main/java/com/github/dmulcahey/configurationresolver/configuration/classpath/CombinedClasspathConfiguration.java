@@ -10,30 +10,24 @@ import org.apache.commons.configuration2.interpol.ExprLookup;
 import org.apache.commons.configuration2.interpol.Lookup;
 import org.apache.commons.configuration2.tree.NodeCombiner;
 import org.apache.commons.configuration2.tree.OverrideCombiner;
-import org.apache.commons.lang3.StringUtils;
 
 import com.github.dmulcahey.configurationresolver.configuration.Configuration;
 import com.github.dmulcahey.configurationresolver.configuration.ConfigurationDescriptor;
 import com.github.dmulcahey.configurationresolver.configuration.FileBasedConfiguration;
 import com.github.dmulcahey.configurationresolver.configuration.classpath.util.CommonsConfigurationUtil;
-import com.github.dmulcahey.configurationresolver.configuration.classpath.util.PropertyUtil;
-import com.github.dmulcahey.configurationresolver.configuration.lookup.DecryptionLookup;
+import com.github.dmulcahey.configurationresolver.configuration.lookup.ConfigurationLookup;
+import com.github.dmulcahey.configurationresolver.configuration.lookup.ConfigurationLookupResolver;
+import com.github.dmulcahey.configurationresolver.configuration.lookup.expression.ExpressionLookupVariableProvider;
+import com.github.dmulcahey.configurationresolver.configuration.lookup.expression.ExpressionLookupVariableProviderResolver;
 import com.github.dmulcahey.configurationresolver.resources.classpath.ClasspathResource;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 public class CombinedClasspathConfiguration extends org.apache.commons.configuration2.CombinedConfiguration implements FileBasedConfiguration<ClasspathResource> {
 	
+	public static final String EXPRESSION_PREFIX = "expr";
 	private ConfigurationDescriptor<ClasspathResource> combinedConfigurationDescriptor;
 	private Set<String> importedConfigurations = Sets.newHashSet();
-	private static final Map<String, Lookup> LOOKUPS = Maps.newHashMap();
-	
-	public static final String USE_UNION_COMBINER = "CfgMgr.useUnionCombiner";
-	public static final String USE_MERGE_COMBINER = "CfgMgr.useMergeCombiner";
-	
-	static{
-		LOOKUPS.put("decrypt", new DecryptionLookup());
-	}
 	
 	public CombinedClasspathConfiguration() {
 		this(new OverrideCombiner());
@@ -41,17 +35,7 @@ public class CombinedClasspathConfiguration extends org.apache.commons.configura
 
 	public CombinedClasspathConfiguration(NodeCombiner nodeCombiner) {
 		super(nodeCombiner);
-		this.getInterpolator().setEnableSubstitutionInVariables(true);
-		Map<String, Lookup> myLookups = Maps.newHashMap(LOOKUPS);
-		ExprLookup.Variables variables = new ExprLookup.Variables();
-		variables.add(new ExprLookup.Variable("String", StringUtils.class));
-		variables.add(new ExprLookup.Variable("System", "Class:java.lang.System"));
-		variables.add(new ExprLookup.Variable("Math", "Class:java.lang.Math"));
-		variables.add(new ExprLookup.Variable(PropertyUtil.PREFIX, PropertyUtil.class));
-		ExprLookup expressionLookup = new ExprLookup(variables);
-		expressionLookup.setInterpolator(this.getInterpolator());
-		myLookups.put("expr", expressionLookup);
-		this.setPrefixLookups(myLookups);
+		initializeConfigurationLookups();
 	}
 
 	@Override
@@ -109,6 +93,28 @@ public class CombinedClasspathConfiguration extends org.apache.commons.configura
 	void importConfiguration(CombinedClasspathConfiguration configuration){
 		importedConfigurations.add(configuration.getConfigurationDescriptor().getName());
 		this.addConfiguration(configuration, configuration.getConfigurationDescriptor().getName());
+	}
+	
+	private void initializeConfigurationLookups(){
+		this.getInterpolator().setEnableSubstitutionInVariables(true);
+		Set<ConfigurationLookup> configurationLookups = new ConfigurationLookupResolver().resolve(null);
+		Map<String, Lookup> myLookups = Maps.newHashMapWithExpectedSize(configurationLookups.size());
+		for(ConfigurationLookup configurationLookup : configurationLookups){
+			myLookups.put(configurationLookup.getPrefix(), configurationLookup);
+		}
+		myLookups.put(EXPRESSION_PREFIX, initializeExpressions());
+		this.setPrefixLookups(myLookups);
+	}
+	
+	private ExprLookup initializeExpressions(){
+		Set<ExpressionLookupVariableProvider> expressionLookupVariableProviders = new ExpressionLookupVariableProviderResolver().resolve(null);
+		ExprLookup.Variables variables = new ExprLookup.Variables();
+		for(ExpressionLookupVariableProvider expressionLookupVariableProvider : expressionLookupVariableProviders){
+			variables.add(new ExprLookup.Variable(expressionLookupVariableProvider.getPrefix(), expressionLookupVariableProvider.getValueProvider()));
+		}
+		ExprLookup expressionLookup = new ExprLookup(variables);
+		expressionLookup.setInterpolator(this.getInterpolator());
+		return expressionLookup;
 	}
 	
 }
