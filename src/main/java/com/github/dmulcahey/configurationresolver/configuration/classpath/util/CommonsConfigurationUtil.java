@@ -14,6 +14,8 @@ public class CommonsConfigurationUtil {
 	public static final String PROPERTIES_EXTENSION = ".properties";
 	public static final String XML_EXTENSION = ".xml";
 	
+	private CommonsConfigurationUtil(){}
+	
 	public static Configuration buildConfiguration(ClasspathResource classpathResource) throws ConfigurationException {
 		if(classpathResource.getResourceName().endsWith(PROPERTIES_EXTENSION)){
 			FileBasedConfigurationBuilder<PropertiesConfiguration> builder =

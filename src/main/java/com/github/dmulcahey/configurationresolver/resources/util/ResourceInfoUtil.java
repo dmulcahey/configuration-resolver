@@ -12,6 +12,8 @@ import com.github.dmulcahey.configurationresolver.resources.classpath.ClassPath.
 import com.google.common.collect.Sets;
 
 public class ResourceInfoUtil {
+	
+	private ResourceInfoUtil(){}
 
 	public static Set<String> getSubdirectoryNamesFromResourceInfo(Collection<ResourceInfo> resources, String parentDirectoryName) throws IOException{
 		Set<String> subdirectoryNames = Sets.newHashSet();

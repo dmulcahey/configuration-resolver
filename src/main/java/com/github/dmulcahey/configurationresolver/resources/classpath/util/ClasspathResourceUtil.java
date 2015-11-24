@@ -12,6 +12,8 @@ import com.github.dmulcahey.configurationresolver.resources.util.ResourceInfoUti
 import com.google.common.collect.Sets;
 
 public class ClasspathResourceUtil {
+	
+	private ClasspathResourceUtil(){}
 
 	public static Set<String> getSubdirectoryNamesFromParentDirectory(ClassPath classPath, final String parentDirectoryName) throws IOException{
 		FilteredClasspathResourceResourceProvider classpathResourceResourceProvider = FilteredClasspathResourceResourceProvider.builder()
