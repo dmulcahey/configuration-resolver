@@ -50,5 +50,41 @@ public class ClasspathResource extends AbstractResource {
 	public boolean isFile() throws FileSystemException{
 		return VFS.getManager().resolveFile(resourceInfo.url().toExternalForm()).getType().equals(FileType.FILE);
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((resourceInfo == null) ? 0 : resourceInfo.url().toExternalForm().hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj){
+			return true;
+		}
+		if (obj == null){
+			return false;
+		}
+		if (!(obj instanceof ClasspathResource)){
+			return false;
+		}
+		ClasspathResource other = (ClasspathResource) obj;
+		if (resourceInfo == null) {
+			if (other.resourceInfo != null){
+				return false;
+			}
+		} else if (!resourceInfo.url().toExternalForm().equals(other.resourceInfo.url().toExternalForm())){
+			return false;
+		}
+		return true;
+	}
 	
 }
