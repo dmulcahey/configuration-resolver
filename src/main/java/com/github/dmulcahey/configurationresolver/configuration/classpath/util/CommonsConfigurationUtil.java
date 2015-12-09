@@ -20,12 +20,12 @@ public class CommonsConfigurationUtil {
 		if(classpathResource.getResourceName().endsWith(PROPERTIES_EXTENSION)){
 			FileBasedConfigurationBuilder<PropertiesConfiguration> builder =
 				    new FileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class)
-				    .configure(new Parameters().fileBased().setURL(classpathResource.getURL()));
+				    .configure(new Parameters().properties().setURL(classpathResource.getURL()));
 			return builder.getConfiguration();
 		}else if(classpathResource.getResourceName().endsWith(XML_EXTENSION)){
 			FileBasedConfigurationBuilder<XMLConfiguration> builder =
 				    new FileBasedConfigurationBuilder<XMLConfiguration>(XMLConfiguration.class)
-				    .configure(new Parameters().fileBased().setURL(classpathResource.getURL()));
+				    .configure(new Parameters().xml().setURL(classpathResource.getURL()));
 			return builder.getConfiguration();
 		}
 		throw new RuntimeException("Unable to build a configuration object for: " + classpathResource.getResourceName());

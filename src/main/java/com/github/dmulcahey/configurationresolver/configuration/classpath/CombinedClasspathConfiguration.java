@@ -8,6 +8,9 @@ import org.apache.commons.configuration2.ConfigurationConverter;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.configuration2.interpol.ExprLookup;
 import org.apache.commons.configuration2.interpol.Lookup;
+import org.apache.commons.configuration2.tree.DefaultExpressionEngine;
+import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
+import org.apache.commons.configuration2.tree.ExpressionEngine;
 import org.apache.commons.configuration2.tree.NodeCombiner;
 import org.apache.commons.configuration2.tree.OverrideCombiner;
 
@@ -26,8 +29,18 @@ import com.google.common.collect.Sets;
 public class CombinedClasspathConfiguration extends org.apache.commons.configuration2.CombinedConfiguration implements FileBasedConfiguration<ClasspathResource> {
 	
 	public static final String EXPRESSION_PREFIX = "expr";
+	private static final ExpressionEngine EXPRESSION_ENGINE;
 	private ConfigurationDescriptor<ClasspathResource> combinedConfigurationDescriptor;
 	private Set<String> importedConfigurations = Sets.newHashSet();
+	
+	
+	static {
+		DefaultExpressionEngineSymbols symbols = new DefaultExpressionEngineSymbols.Builder(DefaultExpressionEngineSymbols.DEFAULT_SYMBOLS)
+			.setPropertyDelimiter("~@#$%^&*")
+			.setEscapedDelimiter("~@#$%^&*")
+			.create();
+		EXPRESSION_ENGINE = new DefaultExpressionEngine(symbols);
+	}
 	
 	public CombinedClasspathConfiguration() {
 		this(new OverrideCombiner());
@@ -35,6 +48,8 @@ public class CombinedClasspathConfiguration extends org.apache.commons.configura
 
 	public CombinedClasspathConfiguration(NodeCombiner nodeCombiner) {
 		super(nodeCombiner);
+		setExpressionEngine(EXPRESSION_ENGINE);
+		setConversionExpressionEngine(EXPRESSION_ENGINE);
 		initializeConfigurationLookups();
 	}
 
