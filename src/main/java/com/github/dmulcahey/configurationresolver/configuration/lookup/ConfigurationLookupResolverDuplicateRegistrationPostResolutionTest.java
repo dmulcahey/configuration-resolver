@@ -2,11 +2,14 @@ package com.github.dmulcahey.configurationresolver.configuration.lookup;
 
 import java.util.Set;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.github.dmulcahey.resolver.ResolutionTest;
 import com.github.dmulcahey.resolver.ResolutionTestResult;
 import com.google.common.collect.Sets;
 
 @ConfigurationLookupResolverPostresolutionTest
+@Slf4j
 public class ConfigurationLookupResolverDuplicateRegistrationPostResolutionTest implements ResolutionTest<Set<ConfigurationLookup>> {
 
 	@Override
@@ -19,7 +22,7 @@ public class ConfigurationLookupResolverDuplicateRegistrationPostResolutionTest 
 		ResolutionTestResult resolutionTestResult = new ResolutionTestResult();
 		
 		if(configurationLookups == null || configurationLookups.isEmpty()){
-			resolutionTestResult.setInformationMessage("No configuration lookup instances were registered");
+			log.debug("No configuration lookup instances were registered");
 		}else{
 			StringBuilder errorMessage = new StringBuilder();
 			Set<String> prefixes = Sets.newHashSetWithExpectedSize(configurationLookups.size());
