@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>configuration-resolver</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.2</version>
 
 	<parent>
 		<groupId>com.github.dmulcahey</groupId>
 		<artifactId>parent-pom</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.1</version>
 	</parent>
 
 	<packaging>jar</packaging>
@@ -39,7 +39,7 @@
 		<dependency>
 			<groupId>com.github.dmulcahey</groupId>
 			<artifactId>resolver</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
+			<version>0.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
